@@ -36,28 +36,33 @@ public class PrintJobTest {
 	UserTransaction utx;
 
 	/**
-	 * This test shows only the number of update statements generated when using @OrderColumn
+	 * This test aimed at showing the number of update statements generated when using @OrderColumn.
+	 * 
+	 * In fact @OrderColumn is not supported by Hibernate when applied on the inverse side of a @OneToMany 
+	 * relationship. So it is simply ignored here.
+	 * 
+	 * See https://hibernate.onjira.com/browse/HHH-5732
 	 */
 	@Test
 	public void testPersistPrintJobs() throws Exception {
-		
+
 		PrintQueue queue = new PrintQueue();
 		queue.setName("test");
-		
+
 		PrintJob job = new PrintJob();
 		job.setQueue(queue);
 		job.setContent("job1");
 		queue.getJobs().add(job);
 		em.persist(job);
-		
+
 		job = new PrintJob();
 		job.setQueue(queue);
 		job.setContent("job2");
 		queue.getJobs().add(job);
 		em.persist(job);
-		
+
 		em.persist(queue);
-		
+
 		// => 2 update PrintJob set content=?, queue_name=? where id=?
 	}
 
@@ -69,9 +74,9 @@ public class PrintJobTest {
 
 	@After
 	public void commitTransaction() throws Exception {
-	    utx.commit();
+		utx.commit();
 	}
-	
+
 	private void clearData() throws Exception {
 		utx.begin();
 		em.joinTransaction();
@@ -85,6 +90,5 @@ public class PrintJobTest {
 		utx.begin();
 		em.joinTransaction();
 	}
-	
 
 }
