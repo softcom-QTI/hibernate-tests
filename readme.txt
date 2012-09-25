@@ -1,6 +1,6 @@
-Project requires an installation of JBoss AS 7 (location set in arquillian.xml)
-
 Run all tests with following command:
-mvn clean test -Parq-jbossas-managed-7
+mvn clean test
 
-TODO: modify arquilian config to use additional target JBoss AS 6 embedded (if it starts in a reasonable time) to avoid depending on a JBoss installation. There is for now no embedded JBoss AS 7 target. 
+Profile arq-jbossas-managed-7 for testing in managed JBoss AS 7 is active by default.
+
+Build will download and unpack a JBoss AS 7 release under target. 
