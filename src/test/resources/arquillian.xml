@@ -19,23 +19,30 @@
 			the jbossHome property -->
 		<configuration>
 			<property name="jbossHome">target/jboss-as-${jboss.version:7.1.1.Final}</property>
-			<!-- <property name="javaVmArguments">-Xmx512m -XX:MaxPermSize=128m -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=y</property> 
-				</configuration> -->
+
+			<!-- Uncomment to debug in managed container -->
+			<!-- <property name="javaVmArguments">-Xmx512m -XX:MaxPermSize=128m -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=y</property> -->
 		</configuration>
 
 	</container>
 
+	<extension qualifier="persistence">
+
+		<!-- By default our tests have no transaction. We want to define it explicitly -->
+		<property name="defaultTransactionMode">DISABLED</property>
+
+		<!-- Uncomment to dump data after test -->
+		<property name="dumpData">true</property>
+		<property name="dumpDirectory">/tmp</property>
+	</extension>
 
 	<extension qualifier="persistence-dbunit">
 		<property name="datatypeFactory">org.dbunit.ext.h2.H2DataTypeFactory</property>
 		<property name="dataSeedStrategy">INSERT</property>
 		<property name="defaultDataSetFormat">YAML</property>
 
-		<!-- Uncomment to dump data after test => Does not work for me :-( -->
-		<!-- 
-		<property name="dumpData">true</property>
-		<property name="dumpDirectory">/tmp</property>
- 		-->
 
 	</extension>
+
 </arquillian>
+

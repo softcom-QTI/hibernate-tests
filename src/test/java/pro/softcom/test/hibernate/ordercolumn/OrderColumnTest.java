@@ -14,6 +14,7 @@ import org.jboss.arquillian.junit.InSequence;
 import org.jboss.arquillian.persistence.Cleanup;
 import org.jboss.arquillian.persistence.ShouldMatchDataSet;
 import org.jboss.arquillian.persistence.TestExecutionPhase;
+import org.jboss.arquillian.persistence.TransactionMode;
 import org.jboss.arquillian.persistence.Transactional;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -23,7 +24,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(Arquillian.class)
-@Transactional()
+@Transactional(TransactionMode.COMMIT)
 @Cleanup(phase = TestExecutionPhase.NONE)
 public class OrderColumnTest {
 

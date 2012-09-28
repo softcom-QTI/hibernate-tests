@@ -1,0 +1,8 @@
+department:
+  - id: 1
+    name: Technology
+employee:
+  - id: 1
+    firstname: Roger
+    lastname: Legros
+    department_id: 1

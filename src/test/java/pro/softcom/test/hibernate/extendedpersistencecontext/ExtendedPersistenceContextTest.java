@@ -1,14 +1,14 @@
 package pro.softcom.test.hibernate.extendedpersistencecontext;
 
-
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import javax.ejb.EJB;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.persistence.ShouldMatchDataSet;
+import org.jboss.arquillian.persistence.TransactionMode;
+import org.jboss.arquillian.persistence.Transactional;
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -30,24 +30,35 @@ public class ExtendedPersistenceContextTest {
 				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
 	}
 
-	@PersistenceContext
-	EntityManager em;
-
 	@EJB
 	DepartmentManager departmentManager;
 	
 	/**
-     * Company has a map of entities (Employee) keyed by entity (Department)
+     * Test is not transactional, DepartmentManager starts 4 transactions
 	 */
 	@Test
-	@UsingDataSet("datasets/extendedpersistencecontext/initial.yml")
-	public void testPersist() throws Exception {
+    @UsingDataSet("extendedpersistencecontext/initial.yml")
+    @ShouldMatchDataSet("extendedpersistencecontext/expected.yml")
+	public void testSetNameAddEmployee() throws Exception {
 
-		
-		Department dept = em.find(Department.class, 1L);
-		Employee emp = em.find(Employee.class, 1L);
+	    // Given 
+	    // Initial dataset
+	    
+	    // When
+	    departmentManager.init(1L);
+        departmentManager.setName("Technology", false);
+	    departmentManager.addEmployee(1L);
 
-		assertEquals((Long) 1L, dept.getId());
-}
+        departmentManager.setName("Accounting", true);
+
+        // A method rollbacking the transaction seems to clear the extended persistence context
+        // Following call has no effect because dept in detached
+        departmentManager.setName("Bla", false);
+
+        // Then
+	    // Expected dataset
+        assertEquals("Department has 1 employee", 1, departmentManager.getEmployeeCount());
+        departmentManager.finished();
+	}
 
 }
