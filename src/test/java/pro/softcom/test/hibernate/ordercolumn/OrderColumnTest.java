@@ -30,7 +30,7 @@ public class OrderColumnTest {
 
     @Deployment
     public static Archive<?> createTestArchive() {
-        return ShrinkWrap.create(WebArchive.class, "test.war").addClasses(PrintQueue.class, PrintJob.class)
+        return ShrinkWrap.create(WebArchive.class, "test.war").addPackage(PrintQueue.class.getPackage())
                 .addAsResource("META-INF/persistence.xml", "META-INF/persistence.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
     }

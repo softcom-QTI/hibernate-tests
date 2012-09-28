@@ -32,16 +32,16 @@
 		<property name="defaultTransactionMode">DISABLED</property>
 
 		<!-- Uncomment to dump data after test -->
+		<!-- 
 		<property name="dumpData">true</property>
 		<property name="dumpDirectory">/tmp</property>
+		-->
 	</extension>
 
 	<extension qualifier="persistence-dbunit">
 		<property name="datatypeFactory">org.dbunit.ext.h2.H2DataTypeFactory</property>
 		<property name="dataSeedStrategy">INSERT</property>
 		<property name="defaultDataSetFormat">YAML</property>
-
-
 	</extension>
 
 </arquillian>
