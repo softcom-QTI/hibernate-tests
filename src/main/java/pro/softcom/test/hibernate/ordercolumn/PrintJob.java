@@ -2,15 +2,18 @@ package pro.softcom.test.hibernate.ordercolumn;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="print_job")
 public class PrintJob {
 
     @Id 
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator="print_job_gen")
+    @SequenceGenerator(name="print_job_gen", sequenceName="print_job¯¯§_seq")
     private Long id;
 
 	@ManyToOne

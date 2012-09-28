@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 @Entity
 public class Employee {
@@ -17,9 +16,6 @@ public class Employee {
 
     private String lastName;
 
-    @ManyToOne
-    private Company company;
-    
 	public String getFirstName() {
 		return firstName;
 	}
@@ -40,12 +36,4 @@ public class Employee {
 		return id;
 	}
 
-	public Company getCompany() {
-		return company;
-	}
-
-	public void setCompany(Company company) {
-		this.company = company;
-	}
-    
 }

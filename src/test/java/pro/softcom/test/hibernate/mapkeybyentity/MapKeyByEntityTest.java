@@ -1,29 +1,35 @@
 package pro.softcom.test.hibernate.mapkeybyentity;
 
-import javax.inject.Inject;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.UserTransaction;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.persistence.Cleanup;
+import org.jboss.arquillian.persistence.ShouldMatchDataSet;
+import org.jboss.arquillian.persistence.TestExecutionPhase;
+import org.jboss.arquillian.persistence.Transactional;
+import org.jboss.arquillian.persistence.UsingDataSet;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(Arquillian.class)
+@Transactional
+@Cleanup(phase = TestExecutionPhase.NONE)
 public class MapKeyByEntityTest {
 
 	@Deployment
 	public static Archive<?> createTestArchive() {
 		return ShrinkWrap
 				.create(WebArchive.class, "test.war")
-				.addClasses(Company.class, Department.class, Employee.class)
+				.addPackage(Company.class.getPackage())
 				.addAsResource("META-INF/persistence.xml",
 						"META-INF/persistence.xml")
 				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
@@ -32,54 +38,25 @@ public class MapKeyByEntityTest {
 	@PersistenceContext
 	EntityManager em;
 
-	@Inject
-	UserTransaction utx;
-
 	/**
      * Company has a map of entities (Employee) keyed by entity (Department)
 	 */
 	@Test
+	@UsingDataSet("mapkeybyentity/initial.yml")
+	@ShouldMatchDataSet("mapkeybyentity/expected.yml")
 	public void testPersist() throws Exception {
 
-		Company company = new Company();
-		em.persist(company);
+		// Given
+		Company comp = em.find(Company.class, 1L);
+		Department dept = em.find(Department.class, 1L);
+		Employee emp = em.find(Employee.class, 1L);
+		assertFalse("Map does not contain department responsible", comp.getDepartmentResponsibles().containsKey(dept));
 		
-		Employee roger = new Employee();
-		roger.setFirstName("Roger");		
-		roger.setLastName("Legros");
-		roger.setCompany(company);
-		em.persist(roger);
+		// When
+		comp.getDepartmentResponsibles().put(dept, emp);
 		
-		Department accounting = new Department();
-		accounting.setName("accounting");
-		em.persist(accounting);
-		
-		company.getDepartmentResponsibles().put(accounting, roger);
-	}
-
-	@Before
-	public void preparePersistenceTest() throws Exception {
-		clearData();
-		startTransaction();
-	}
-
-	@After
-	public void commitTransaction() throws Exception {
-		utx.commit();
-	}
-
-	private void clearData() throws Exception {
-		utx.begin();
-		em.joinTransaction();
-		System.out.println("Dumping old records...");
-		em.createQuery("delete from PrintJob").executeUpdate();
-		em.createQuery("delete from PrintQueue").executeUpdate();
-		utx.commit();
-	}
-
-	private void startTransaction() throws Exception {
-		utx.begin();
-		em.joinTransaction();
+		// Then
+        assertEquals("Map contains department responsible", emp, comp.getDepartmentResponsibles().get(dept));
 	}
 
 }
