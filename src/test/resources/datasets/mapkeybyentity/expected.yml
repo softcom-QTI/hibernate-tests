@@ -1,0 +1,16 @@
+department:
+  - id: 1
+    name: R&D
+  - id: 2
+    name: Accounting
+employee:
+  - id: 1
+    firstname: Roger
+    lastname: Legros
+company:
+  - id: 1
+    name: Softcom
+dept_emp_resp:
+  - comp_id: 1
+    emp_id: 1
+    dept_id: 1

@@ -1,0 +1,8 @@
+department:
+  - id: 1
+    name: R&D
+employee:
+  - id: 1
+    firstname: Roger
+    lastname: Legros
+    department_id: [null]
