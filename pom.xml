@@ -22,6 +22,7 @@
 		<version.jboss_javaee6_spec>2.0.0.Final</version.jboss_javaee6_spec>
 		<version.jbossas_7>7.1.1.Final</version.jbossas_7>
 		<version.hibernate_jpamodelgen>1.1.1.Final</version.hibernate_jpamodelgen>
+		<version.hibernate_core>4.0.1.Final</version.hibernate_core>
 		<version.junit>4.8.1</version.junit>
 		<version.log4j>1.2.14</version.log4j>
 	</properties>
@@ -106,6 +107,13 @@
 			</dependency>
 
 			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-core</artifactId>
+				<scope>provided</scope>
+				<version>${version.hibernate_core}</version>
+			</dependency>
+
+			<dependency>
 				<groupId>org.jboss.arquillian</groupId>
 				<artifactId>arquillian-bom</artifactId>
 				<version>${version.arquillian_core}</version>
@@ -170,6 +178,13 @@
 			<groupId>org.hibernate.javax.persistence</groupId>
 			<artifactId>hibernate-jpa-2.0-api</artifactId>
 			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<scope>provided</scope>
+			<version>4.0.1.Final</version>
 		</dependency>
 
 		<!-- Import the EJB API, we use provided scope as the API is included in 
