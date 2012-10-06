@@ -12,9 +12,11 @@ import org.hibernate.Session;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.Cleanup;
+import org.jboss.arquillian.persistence.ShouldMatchDataSet;
 import org.jboss.arquillian.persistence.TestExecutionPhase;
 import org.jboss.arquillian.persistence.TransactionMode;
 import org.jboss.arquillian.persistence.Transactional;
+import org.jboss.arquillian.persistence.UsingDataSet;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
@@ -42,7 +44,7 @@ public class PersistenceContextFlushTest {
      * in persistence context
      */
     @Test
-    public void testFlush() {
+    public void testQueryFlush() {
 
         // Given
         Department dept = new Department();
@@ -69,7 +71,7 @@ public class PersistenceContextFlushTest {
      * This shows flush behavior of Hibernate when issuing a query for entity for which there is no change
      */
     @Test
-    public void testNoFlush() {
+    public void testQueryNoFlush() {
 
         // Given
         Department dept = new Department();
@@ -91,4 +93,28 @@ public class PersistenceContextFlushTest {
         Session session = em.unwrap(Session.class);
         assertTrue("Persistence still contains some un-flushed changes", session.isDirty());
     }
+    
+    /**
+     * This shows flush behavior of Hibernate when persistence context contains a managed Person entity having a owned relationship to a detached PhoneNumber entity
+     * (changes to the relationship are synchronised) 
+     * 
+     * See JPA2 specification chap. 3.2.4
+     */
+    @Test
+    @UsingDataSet("persistencecontextflush/owned_onetomany_initial.yml")
+    @ShouldMatchDataSet("persistencecontextflush/owned_onetomany_expected.yml")
+    public void testFlushDetachedOwnedOneToMany() {
+
+        // Given
+        Person pers = em.find(Person.class, 1L);
+        PhoneNumber n = em.find(PhoneNumber.class, 1L);
+        em.detach(n);
+
+        // When
+        pers.getPhoneNumbers().add(n);
+        
+        // Then
+        // Expected dataset
+    }
+    
 }

@@ -1,0 +1,11 @@
+Person:
+  - id: 1
+    firstName: Lulu
+    lastName: Latortue
+PhoneNumber:
+  - id: 1
+    type: 0
+    number: +41261234567
+Person_PhoneNumber:
+  - Person_id: 1
+    phoneNumbers_id: 1
