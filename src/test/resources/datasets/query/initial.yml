@@ -1,0 +1,36 @@
+person:
+  - id: 1
+    firstName: Lulu
+    lastName: Latortue
+    salary: 80000
+  - id: 2
+    firstName: Roger
+    lastName: Legros
+    salary: 125000
+  - id: 3
+    firstName: Samuel
+    lastName: Rouiller
+    salary: 100000
+  - id: 4
+    firstName: Unautre
+    lastName: Gaillard
+    salary: [null]
+category:
+  - id: 1
+    name: business
+  - id: 2
+    name: friends
+  - id: 3
+    name: family
+person_category:
+  - person_id: 1
+    category_id: 1
+  - person_id: 1
+    category_id: 2
+  - person_id: 2
+    category_id: 1
+  - person_id: 2
+    category_id: 3
+  - person_id: 4
+    category_id: 1
+       
