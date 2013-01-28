@@ -24,14 +24,19 @@ import javax.persistence.NamedQuery;
         // We need to specify "where p1.salary is not null" to avoid that comparison with null salary returns false
         @NamedQuery(
                 name = Person.SELECT_PERSON_WITH_MAX_SALARY, 
-                query = "select p from Person p where p.salary >= ALL(select p1.salary from Person p1 where p1.salary is not null)")}
-        )
+                query = "select p from Person p where p.salary >= ALL(select p1.salary from Person p1 where p1.salary is not null)"),
+        
+        @NamedQuery(
+                name = Person.SELECT_COUNT_CATEGORIES, 
+                query = "select p.id, COUNT(p.categories) from Person p group by p.id")
+})
 //@formatter:on
 public class Person {
 
     public static final String SELECT_PERSONS_WITHOUT_CATEGORIES = "selectPersonsWithoutCategory";
     public static final String SELECT_PERSON_WITH_MAX_SALARY = "selectPersonsWithMaxSalary";
-    
+    public static final String SELECT_COUNT_CATEGORIES = "selectCountCategories";
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

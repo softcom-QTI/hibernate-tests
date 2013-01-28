@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -116,4 +117,49 @@ public class QueryTest {
         // Then
         assertEquals("Legros", q.getSingleResult().getLastName());
     }
+
+    /**
+     * This shows usage of COUNT aggregate function in select clause. 
+     * 
+     * It perform a query to count number of categories for each person
+     */
+    @Test
+    @UsingDataSet("query/initial.yml")
+    public void testSelectCount() {
+
+        // Given
+        // Initial dataset
+
+        // When
+        // Query using JPQL
+        Query q = em.createQuery("select d, count(e) from Department d left join d.employees e group by d");
+        q.getResultList();
+    }
+
+    /**
+     * This shows result of quey according to what is specified in select clause
+     */
+    @Test
+    @UsingDataSet("query/initial.yml")
+    public void testSelect() {
+
+        // Given
+        // Initial dataset
+
+        // When
+        // Query all employees from Department R&D
+        Query q1 = em.createQuery("select e from Department d join d.employees e where d.name = 'R&D'");
+
+        // Old EJB-QL syntax
+        Query q2 = em.createQuery("select e from Department d, in (d.employees) e where d.name = 'R&D'");
+
+        // This is supposed to be invalid syntax (collection-valued path in select clause) but is supported by Hibernate
+        Query q3 = em.createQuery("select d.employees from Department d where d.name = 'R&D'");
+
+        // Then
+        assertEquals(2, q1.getResultList().size());
+        assertEquals(2, q2.getResultList().size());
+        assertEquals(2, q3.getResultList().size());
+    }
+
 }

@@ -1,0 +1,11 @@
+employee:
+  - id: 1
+    firstname: Roger
+    lastname: Legros
+    percentage: [null]
+    type: E
+  - id: 2
+    firstname: Samuel
+    lastname: Rouiller
+    percentage: 80
+    type: PE
