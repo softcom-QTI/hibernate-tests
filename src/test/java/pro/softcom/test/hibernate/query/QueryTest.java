@@ -3,6 +3,7 @@ package pro.softcom.test.hibernate.query;
 import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -13,6 +14,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
@@ -83,6 +85,41 @@ public class QueryTest {
     }
 
     /**
+     * This shows usage of Criteria API to build a dynamic join and where clauses depending on search parameters
+     */
+    @Test
+    @UsingDataSet("query/initial.yml")
+    public void testSearch() {
+
+        // Given
+        // Initial dataset
+
+        // When/Then
+        assertEquals(1, searchPersons("Legr%", "friends").size());
+        assertEquals(2, searchPersons(null, "friends").size());
+    }
+
+    private List<Person> searchPersons(String lastNamePattern, String categoryName) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Person> c = cb.createQuery(Person.class);
+        Root<Person> person = c.from(Person.class);
+        c.select(person);
+
+        List<Predicate> predicates = new ArrayList<Predicate>();
+        if (lastNamePattern != null) {
+            predicates.add(cb.like(person.get("lastName").as(String.class), lastNamePattern));
+        }
+        if (categoryName != null) {
+            Join<Person, Category> categories = person.join("categories", JoinType.LEFT);
+            predicates.add(cb.equal(categories.get("name").as(String.class), categoryName));
+        }
+        c.where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
+
+        TypedQuery<Person> q = em.createQuery(c);
+        return q.getResultList();
+    }
+
+    /**
      * This shows usage of ALL expression in where clause. 
      * 
      * It perform a query to retrieve the person with max salary
@@ -137,7 +174,7 @@ public class QueryTest {
     }
 
     /**
-     * This shows result of quey according to what is specified in select clause
+     * This shows result of query according to what is specified in select clause
      */
     @Test
     @UsingDataSet("query/initial.yml")

@@ -26,9 +26,11 @@ person_category:
   - person_id: 1
     category_id: 1
   - person_id: 1
-    category_id: 2
+    category_id: 2  
   - person_id: 2
     category_id: 1
+  - person_id: 2
+    category_id: 2
   - person_id: 2
     category_id: 3
   - person_id: 4
