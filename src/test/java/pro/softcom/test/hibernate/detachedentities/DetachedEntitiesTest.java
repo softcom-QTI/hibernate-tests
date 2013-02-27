@@ -36,7 +36,10 @@ public class DetachedEntitiesTest {
     EntityManager em;
 
     /**
-     * This shows ...
+     * This shows own an owned collection can be modified after the owning entity has been detached
+     * - remove entity of collection => will be removed by merge() because of orphanRemoval = true
+     * - update entity of collection => will be updated by merge() because of cascade
+     * - add new entity to collection => will be inserted by merge() because of cascade
      */
     @Test
     @UsingDataSet("detachedentities/initial.yml")
@@ -63,7 +66,6 @@ public class DetachedEntitiesTest {
         newPn.setType(NumberType.HOME);
         newPn.setNumber("+41269999999");
         pers.getPhoneNumbers().add(newPn);
-        pn.setPerson(pers);
 
         // Merge entity
         em.merge(pers);

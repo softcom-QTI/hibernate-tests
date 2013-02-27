@@ -13,7 +13,7 @@ public class PrintJob {
 
     @Id 
     @GeneratedValue(generator="print_job_gen")
-    @SequenceGenerator(name="print_job_gen", sequenceName="print_job¯¯§_seq")
+    @SequenceGenerator(name="print_job_gen", sequenceName="print_job_seq")
     private Long id;
 
 	@ManyToOne

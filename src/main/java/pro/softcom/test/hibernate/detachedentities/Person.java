@@ -3,6 +3,7 @@ package pro.softcom.test.hibernate.detachedentities;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,7 +21,7 @@ public class Person {
 
     private String lastName;
     
-    @OneToMany(mappedBy="person")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<PhoneNumber> phoneNumbers = new HashSet<PhoneNumber>();
     
 	public String getFirstName() {
