@@ -20,7 +20,7 @@
 		<version.arquillian_persistence>1.0.0.Alpha6</version.arquillian_persistence>
 		<version.arquillian_container_jbossas>7.5.16.Final-redhat-1</version.arquillian_container_jbossas>
 		<version.jboss_javaee6_spec>3.0.3.Final</version.jboss_javaee6_spec>
-		<version.jbossas_7>7.5.15.Final-redhat-3</version.jbossas_7>
+		<version.jbossas_7>7.5.16.Final-redhat-1</version.jbossas_7>
 		<version.hibernate_jpamodelgen>5.2.10.Final</version.hibernate_jpamodelgen>
 		<version.hibernate_core>5.2.10.Final</version.hibernate_core>
 		<version.junit>4.12</version.junit>
