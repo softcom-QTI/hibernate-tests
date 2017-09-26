@@ -263,7 +263,7 @@
 				<plugins>
 					<plugin>
 						<artifactId>maven-surefire-plugin</artifactId>
-						<version>2.20</version>
+						<version>2.20.1</version>
 						<configuration>
 							<systemProperties>
 								<jboss.version>${version.jbossas_7}</jboss.version>
